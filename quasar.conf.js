@@ -2,8 +2,8 @@
 
 module.exports = function (ctx) {
   return {
-    // app plugins (/src/plugins)
     plugins: [
+      'i18n',
       'axios'
     ],
     css: [
@@ -11,66 +11,42 @@ module.exports = function (ctx) {
     ],
     extras: [
       ctx.theme.mat ? 'roboto-font' : null,
-      'material-icons'
-      // 'ionicons',
+      'material-icons', // at least for QEditor if "ios" theme
       // 'mdi',
-      // 'fontawesome'
+      // 'fontawesome',
+      ctx.theme.ios ? 'ionicons' : null
     ],
     supportIE: true,
-    vendor: {
-      add: [],
-      remove: []
-    },
     build: {
+      // rtl: true,
       scopeHoisting: true,
-      vueRouterMode: 'history',
-      // gzip: true,
-      // analyze: true,
-      // extractCSS: false,
-      // useNotifier: false,
-      extendWebpack (cfg) {
+      vueRouterMode: 'hash',
+      // preloadChunks: false,
+      extendWebpack(cfg) {
+        cfg.module.rules.push({
+          enforce: 'pre',
+          test: /\.(js|vue)$/,
+          loader: 'eslint-loader',
+          exclude: /(node_modules|quasar)/
+        })
       }
     },
     devServer: {
-      // https: true,
-      // port: 8080,
-      open: true // opens browser window automatically
+      open: false,
+      port: 9876
     },
-    // framework: 'all' --- includes everything; for dev only!
     framework: {
-      components: [
-        'QLayout',
-        'QLayoutHeader',
-        'QLayoutDrawer',
-        'QPageContainer',
-        'QPage',
-        'QToolbar',
-        'QToolbarTitle',
-        'QBtn',
-        'QIcon',
-        'QList',
-        'QListHeader',
-        'QItem',
-        'QItemMain',
-        'QItemSide'
-      ],
-      directives: [
-        'Ripple'
-      ],
-      // Quasar plugins
-      plugins: [
-        'Notify'
-      ]
+      all: true,
+      iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
     },
-    // animations: 'all' --- includes all animations
-    animations: [
-    ],
+    animations: 'all',
     pwa: {
-      cacheExt: 'js,html,css,ttf,eot,otf,woff,woff2,json,svg,gif,jpg,jpeg,png,wav,ogg,webm,flac,aac,mp4,mp3',
+      // workboxPluginMode: 'InjectManifest',
+      // workboxOptions: {},
       manifest: {
-        // name: 'Quasar App',
-        // short_name: 'Quasar-PWA',
-        // description: 'Best PWA App in town!',
+        name: 'Lets Run App',
+        short_name: 'Lets Run',
+        description: '#TODO',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
@@ -108,9 +84,7 @@ module.exports = function (ctx) {
       // id: 'org.cordova.quasar.app'
     },
     electron: {
-      extendWebpack (cfg) {
-        // do something with cfg
-      },
+      // bundler: 'builder',
       packager: {
         // OS X / Mac App Store
         // appBundleId: '',
@@ -124,6 +98,6 @@ module.exports = function (ctx) {
     },
 
     // leave this here for Quasar CLI
-    starterKit: '1.0.2'
+    starterKit: '1.0.3'
   }
 }

@@ -1,12 +1,12 @@
 <template>
-  <div id="q-app">
-    <router-view/>
-  </div>
+  <q-page padding>
+    <h1>Feed me</h1>
+  </q-page>
 </template>
 
 <script>
   export default {
-    name: 'App'
+    name: 'PageLrFeed'
   }
 </script>
 
